@@ -1,15 +1,18 @@
 import React from "react";
-import styled, {css} from "styled-components";
+import styled, { css } from "styled-components";
 
 import missions from "../missions";
+import { getCountryWithTopIsolationStatus } from "../utils";
 
-const missionsByAscendingDate = [...missions].sort(({date: dateA}, {date: dateB}) => {
-  if (new Date(dateA) < new Date(dateB)) {
-    return -1;
+const missionsByAscendingDate = [...missions].sort(
+  ({ date: dateA }, { date: dateB }) => {
+    if (new Date(dateA) < new Date(dateB)) {
+      return -1;
+    }
+
+    return 1;
   }
-
-  return 1;
-});
+);
 
 const SMALL_SCREEN = "only screen and (max-width: 750px)";
 
@@ -18,21 +21,24 @@ const theme = {
     layout: "#f2f2f5",
     border: "#c9cdd0",
     text: "##3b3b3c",
-    mission: "#fff"
+    mission: "#fff",
   },
   borderRadius: "5px",
   padding: "8px",
-  headerBorderPadding: "10px"
-}
+  headerBorderPadding: "10px",
+};
 
 const App = () => {
+  const mostIsolatedCountry = getCountryWithTopIsolationStatus(missions);
+
   return (
     <MaxWidthContainer>
       <WebPage>
         <Missions>
-          <MobileMissionCount>
-            {missions.length} missions
-          </MobileMissionCount>
+          <MobileMissionsInfo>
+            {missions.length} missions; most isolated country:{" "}
+            {mostIsolatedCountry}
+          </MobileMissionsInfo>
 
           <Header>
             <SmallCell>Agent ID</SmallCell>
@@ -50,16 +56,17 @@ const App = () => {
             </Mission>
           ))}
 
-          <DesktopMissionCount>
-            {missions.length} missions
-          </DesktopMissionCount>
+          <DesktopMissionsInfo>
+            {missions.length} missions; most isolated country:{" "}
+            {mostIsolatedCountry}
+          </DesktopMissionsInfo>
         </Missions>
       </WebPage>
     </MaxWidthContainer>
   );
 };
 
-const DesktopMissionCount = styled.div`
+const DesktopMissionsInfo = styled.div`
   text-align: right;
   padding: ${theme.padding};
   border: 1px solid ${theme.colors.border};
@@ -69,7 +76,7 @@ const DesktopMissionCount = styled.div`
   }
 `;
 
-const MobileMissionCount = styled.div`
+const MobileMissionsInfo = styled.div`
   text-align: right;
   display: none;
   padding: ${theme.padding};
@@ -92,7 +99,7 @@ const SmallCell = styled.div`
     padding-left: 0;
   }
 
-  ${({isLeftBorder}) => isLeftBorder && applyLeftBorderStyle()};
+  ${({ isLeftBorder }) => isLeftBorder && applyLeftBorderStyle()};
 `;
 
 const MediumCell = styled.div`
@@ -106,7 +113,7 @@ const MediumCell = styled.div`
     padding-left: 0;
   }
 
-  ${({isLeftBorder}) => isLeftBorder && applyLeftBorderStyle()};
+  ${({ isLeftBorder }) => isLeftBorder && applyLeftBorderStyle()};
 `;
 
 const LargeCell = styled.div`
@@ -119,7 +126,7 @@ const LargeCell = styled.div`
     padding-left: 0;
   }
 
-  ${({isLeftBorder}) => isLeftBorder && applyLeftBorderStyle()};
+  ${({ isLeftBorder }) => isLeftBorder && applyLeftBorderStyle()};
 `;
 
 const Mission = styled.div`
