@@ -14,6 +14,8 @@ const missionsByAscendingDate = [...missions].sort(
   }
 );
 
+const mostIsolatedCountry = getCountryWithTopIsolationStatus(missions);
+
 const SMALL_SCREEN = "only screen and (max-width: 750px)";
 
 const theme = {
@@ -28,43 +30,39 @@ const theme = {
   headerBorderPadding: "10px",
 };
 
-const App = () => {
-  const mostIsolatedCountry = getCountryWithTopIsolationStatus(missions);
+const App = () => (
+  <MaxWidthContainer>
+    <WebPage>
+      <Missions>
+        <MobileMissionsInfo>
+          {missions.length} missions; most isolated country:{" "}
+          {mostIsolatedCountry}
+        </MobileMissionsInfo>
 
-  return (
-    <MaxWidthContainer>
-      <WebPage>
-        <Missions>
-          <MobileMissionsInfo>
-            {missions.length} missions; most isolated country:{" "}
-            {mostIsolatedCountry}
-          </MobileMissionsInfo>
+        <Header>
+          <SmallCell>Agent ID</SmallCell>
+          <SmallCell isLeftBorder={true}>Country</SmallCell>
+          <LargeCell isLeftBorder={true}>Address</LargeCell>
+          <MediumCell isLeftBorder={true}>Date</MediumCell>
+        </Header>
 
-          <Header>
-            <SmallCell>Agent ID</SmallCell>
-            <SmallCell isLeftBorder={true}>Country</SmallCell>
-            <LargeCell isLeftBorder={true}>Address</LargeCell>
-            <MediumCell isLeftBorder={true}>Date</MediumCell>
-          </Header>
+        {missionsByAscendingDate.map((mission, index) => (
+          <Mission key={index}>
+            <SmallCell>{mission.agent}</SmallCell>
+            <SmallCell>{mission.country}</SmallCell>
+            <LargeCell>{mission.address}</LargeCell>
+            <MediumCell>{mission.date}</MediumCell>
+          </Mission>
+        ))}
 
-          {missionsByAscendingDate.map((mission, index) => (
-            <Mission key={index}>
-              <SmallCell>{mission.agent}</SmallCell>
-              <SmallCell>{mission.country}</SmallCell>
-              <LargeCell>{mission.address}</LargeCell>
-              <MediumCell>{mission.date}</MediumCell>
-            </Mission>
-          ))}
-
-          <DesktopMissionsInfo>
-            {missions.length} missions; most isolated country:{" "}
-            {mostIsolatedCountry}
-          </DesktopMissionsInfo>
-        </Missions>
-      </WebPage>
-    </MaxWidthContainer>
-  );
-};
+        <DesktopMissionsInfo>
+          {missions.length} missions; most isolated country:{" "}
+          {mostIsolatedCountry}
+        </DesktopMissionsInfo>
+      </Missions>
+    </WebPage>
+  </MaxWidthContainer>
+);
 
 const DesktopMissionsInfo = styled.div`
   text-align: right;
